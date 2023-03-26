@@ -4,27 +4,30 @@ const counter = document.getElementById("counter")
 const pauseBtn = document.getElementById("pause")
 const myForm = document.querySelector("form")
 const restartBtn = document.getElementById("restart")
+const likeBtn = document.getElementById("heart")
 let myNumbah = 0
+let likeNumbah = 0
+let timerId = startTimer()
 
 //see the timer increment every second once the page has loaded
-setInterval(incrementCounter , 1000)
-
-function incrementCounter(){
-    counter.textContent = myNumbah++
+function startTimer () {
+    return setInterval(incrementCounter , 1000)
 }
 
-//manually increment and decrement the counter using the plus and minus buttons
+//manually decrement and increment the counter using the plus and minus buttons
 function decrementCounter(){
    if (myNumbah > 0)
-    counter.textContent = myNumbah--
+    counter.textContent = --myNumbah
+}
+
+function incrementCounter(){
+    counter.textContent = ++myNumbah
 }
 
 minusBtn.addEventListener("click" , decrementCounter)
 plusBtn.addEventListener("click" , incrementCounter)
 
 //"like" an individual number of the counter. i should the see the count of the number of "likes" associated with that number displayed
-const likeBtn = document.getElementById("heart")
-let likeNumbah = 0
 function handleLike() {
     const likeCounter = document.createElement("li")
     likeNumbah++
@@ -34,14 +37,10 @@ function handleLike() {
 
 likeBtn.addEventListener("click" , handleLike)
 
-/*
-pause the counter, which should:
-    -pause the counter
-    -disable all buttons except the pause button
-    -switch the label on the button from "pause" to "resume"
-*/
+//grabs i, puts it into the 
+//pause the counter, disable all buttons except pause and restart, switch label on button from "pause" to "resume"
 pauseBtn.addEventListener("click" , () => {
-    clearInterval(2)
+    clearInterval(timerId)
     minusBtn.disabled = true
     plusBtn.disabled = true
     likeBtn.disabled = true
@@ -53,12 +52,16 @@ function handleResume() {
     minusBtn.disabled = false
     plusBtn.disabled = false
     likeBtn.disabled = false
-    setInterval(incrementCounter, 1000)
+    timerId = startTimer()
     pauseBtn.textContent = "pause"
     pauseBtn.removeEventListener("click" , handleResume)
 }
+
 //click the "restart" button to restart the counter and re-enable the buttons
-restartBtn.addEventListener("click" , () => {myNumbah = 0})
+restartBtn.addEventListener("click" , () => {
+    myNumbah = 0
+    counter.textContent = myNumbah
+})
 
 //leave comments on my gameplay, such as: "Wow, what a fun game this is!"
 myForm.addEventListener("submit" , event => {
