@@ -6,8 +6,14 @@ const myForm = document.querySelector("form")
 const restartBtn = document.getElementById("restart")
 const likeBtn = document.getElementById("heart")
 let myNumbah = 0
-let likeNumbah = 0
 let timerId = startTimer()
+
+likeBtn.addEventListener("click" , handleLike)
+minusBtn.addEventListener("click" , decrementCounter)
+plusBtn.addEventListener("click" , incrementCounter)
+pauseBtn.addEventListener("click" , handlePause)
+restartBtn.addEventListener("click" , handleRestart)
+myForm.addEventListener("submit" , createComment)
 
 //see the timer increment every second once the page has loaded
 function startTimer () {
@@ -24,29 +30,32 @@ function incrementCounter(){
     counter.textContent = ++myNumbah
 }
 
-minusBtn.addEventListener("click" , decrementCounter)
-plusBtn.addEventListener("click" , incrementCounter)
-
 //"like" an individual number of the counter. i should the see the count of the number of "likes" associated with that number displayed
+//i'm trying to
 function handleLike() {
+    if (document.getElementById(`${myNumbah}`) !== undefined){
+        const likeCounter = document.getElementById(`${myNumbah}`)
+        likeCounter.textContent = "poop"
+    }
+    else {
     const likeCounter = document.createElement("li")
-    likeNumbah++
-    likeCounter.textContent = `${myNumbah} has been liked ${likeNumbah} times`
+    const 
     document.querySelector("ul").appendChild(likeCounter)
+    likeCounter.id = `${myNumbah}`
+    }
+    likeCounter.textContent = `${myNumbah} has been liked 1 time`
+    
 }
 
-likeBtn.addEventListener("click" , handleLike)
-
-//grabs i, puts it into the 
 //pause the counter, disable all buttons except pause and restart, switch label on button from "pause" to "resume"
-pauseBtn.addEventListener("click" , () => {
+function handlePause(){
     clearInterval(timerId)
     minusBtn.disabled = true
     plusBtn.disabled = true
     likeBtn.disabled = true
     pauseBtn.textContent = "resume"
     pauseBtn.addEventListener("click" , handleResume)
-    })
+}
 
 function handleResume() {
     minusBtn.disabled = false
@@ -58,16 +67,15 @@ function handleResume() {
 }
 
 //click the "restart" button to restart the counter and re-enable the buttons
-restartBtn.addEventListener("click" , () => {
+function handleRestart(){
     myNumbah = 0
     counter.textContent = myNumbah
-})
-
+}
 //leave comments on my gameplay, such as: "Wow, what a fun game this is!"
-myForm.addEventListener("submit" , event => {
+function createComment(event){
     event.preventDefault()
     const newP = document.createElement("p")
     newP.textContent = event.target.children[0].value
     document.getElementById("list").append(newP)
     myForm.reset()
-})
+}
